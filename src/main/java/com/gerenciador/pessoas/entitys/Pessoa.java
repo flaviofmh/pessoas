@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-public class Pessoa implements Serializable {
+public class Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,6 +38,10 @@ public class Pessoa implements Serializable {
 
     @CreatedDate
     private LocalDateTime createdDate;
+
+    public Pessoa() {
+        super();
+    }
 
     public Long getId() {
         return id;
