@@ -1,11 +1,9 @@
 package com.gerenciador.pessoas.entitys;
 
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -21,10 +19,13 @@ public class Pessoa {
     private Long id;
 
     @NotBlank
-    @Size(max = 14)
+    @Size(max = 150)
     private String nome;
 
     @NotBlank
+    @Size(max = 11, min = 11)
+    @Column(unique = true)
+    @CPF(message = "CPF invalido")
     private String cpf;
 
     @NotBlank
@@ -35,6 +36,8 @@ public class Pessoa {
     private String foto;
 
     private LocalDate dataNascimento;
+
+    private Boolean ativo = Boolean.TRUE;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -97,5 +100,13 @@ public class Pessoa {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 }
