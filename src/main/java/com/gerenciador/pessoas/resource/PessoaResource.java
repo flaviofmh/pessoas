@@ -1,22 +1,19 @@
 package com.gerenciador.pessoas.resource;
 
+import com.gerenciador.pessoas.dtos.PessoaRequest;
 import com.gerenciador.pessoas.dtos.PessoaResponse;
 import com.gerenciador.pessoas.dtos.Response;
 import com.gerenciador.pessoas.entitys.Pessoa;
 import com.gerenciador.pessoas.services.PessoaService;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Type;
+import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -44,6 +41,36 @@ public class PessoaResource {
         response.setData(pessoas);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<Response<PessoaResponse>> salvar(@RequestBody @Valid PessoaRequest pessoaRequest) {
+        Response<PessoaResponse> response = new Response<PessoaResponse>();
+
+        Pessoa pessoa = modelMapper.map(pessoaRequest, Pessoa.class);
+        try {
+            pessoaService.salvarPessoa(pessoa);
+        } catch (Exception ex) {
+            response.getErrors().add(ex.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        PessoaResponse pessoaResponse = modelMapper.map(pessoa, PessoaResponse.class);
+
+        response.setData(pessoaResponse);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping(value = "{id}")
+    public ResponseEntity<Response<String>> delete(@PathVariable("id") Long id) {
+        Response<String> response = new Response<String>();
+        try {
+            pessoaService.deletarPessoa(id);
+        } catch (Exception ex) {
+            response.getErrors().add(ex.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }

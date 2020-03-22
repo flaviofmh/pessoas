@@ -1,67 +1,59 @@
 package com.gerenciador.pessoas.dtos;
 
-import com.gerenciador.pessoas.entitys.Pessoa;
-
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class PessoaResponse {
+public class PessoaRequest {
 
-    private Long id;
-
+    @NotNull
     private String nome;
 
+    @NotNull
     private String cpf;
 
+    @NotNull
     private String email;
 
+    @NotNull
     private String foto;
 
+    @NotNull
     private LocalDate dataNascimento;
 
     public String getNome() {
         return nome;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getFoto() {
-        return foto;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getCpf() {
+        return cpf;
     }
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
 
+    public String getFoto() {
+        return foto;
+    }
+
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
     public void setDataNascimento(LocalDate dataNascimento) {

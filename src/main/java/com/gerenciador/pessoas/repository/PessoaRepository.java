@@ -10,4 +10,6 @@ import java.time.LocalDate;
 public interface PessoaRepository extends CrudRepository<Pessoa, Long> {
 
     Page<Pessoa> findByNomeAndCpfAndDataNascimentoAndEmail(Pageable pages, String nome, String cpf, LocalDate dataNascimento, String email);
+
+    boolean existsByCpf(String cpf);
 }

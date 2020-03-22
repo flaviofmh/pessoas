@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class PessoaService {
@@ -22,6 +23,25 @@ public class PessoaService {
         }
         Pageable pages = PageRequest.of(page, count);
         return this.pessoaRepository.findByNomeAndCpfAndDataNascimentoAndEmail(pages, nome, cpf, dataNascimento, email);
+    }
+
+    public Pessoa salvarPessoa(Pessoa pessoa) throws Exception {
+
+        pessoa.setCpf(pessoa.getCpf().replace(".", "").replace("-", ""));
+
+        if(pessoaRepository.existsByCpf(pessoa.getCpf())) {
+            throw new Exception("CPF duplicado");
+        }
+
+        return this.pessoaRepository.save(pessoa);
+    }
+
+    public void deletarPessoa(Long id) throws Exception {
+        Optional<Pessoa> pessoaOptional = pessoaRepository.findById(id);
+        if(pessoaOptional.isPresent() && pessoaOptional.get().getAtivo() == Boolean.TRUE) {
+            pessoaOptional.get().setAtivo(Boolean.FALSE);
+            pessoaRepository.save(pessoaOptional.get());
+        } else throw new Exception("Usuario invalido");
     }
 
 }
