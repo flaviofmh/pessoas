@@ -1,5 +1,7 @@
 package com.gerenciador.pessoas.services;
 
+import com.gerenciador.pessoas.BusinessException;
+import com.gerenciador.pessoas.MessagesExceptions;
 import com.gerenciador.pessoas.entitys.Pessoa;
 import com.gerenciador.pessoas.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class PessoaService {
@@ -29,30 +32,34 @@ public class PessoaService {
 
     public Pessoa salvarPessoa(Pessoa pessoa, Long id) throws Exception {
 
+        if(pessoa.getCpf() == null) {
+            BusinessException.execptionCustom(MessagesExceptions.EXCEPTION_NULL_FIELD);
+        }
         pessoa.setCpf(pessoa.getCpf().replace(".", "").replace("-", ""));
 
         if(id != null) {
             if(pessoaRepository.existsById(id)) {
                 pessoa.setId(id);
             } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pessoa inexistente");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, MessagesExceptions.PESSOA_INEXISTENTE);
             }
         }
 
         if(id == null && pessoaRepository.existsByCpf(pessoa.getCpf())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CPF duplicado");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MessagesExceptions.CPF_EXISTENTE);
         }
 
         return this.pessoaRepository.save(pessoa);
     }
 
     public void deletarPessoa(Long id) {
+        if(id == null) BusinessException.execptionCustom(MessagesExceptions.EXCEPTION_NULL_FIELD);
         Optional<Pessoa> pessoaOptional = pessoaRepository.findById(id);
 
         if(pessoaOptional.isPresent() && pessoaOptional.get().getAtivo() == Boolean.TRUE) {
             pessoaOptional.get().setAtivo(Boolean.FALSE);
             pessoaRepository.save(pessoaOptional.get());
-        } else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pessoa invalida");
+        } else throw new ResponseStatusException(HttpStatus.NOT_FOUND, MessagesExceptions.PESSOA_INVALIDA);
     }
 
 }
