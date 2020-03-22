@@ -23,9 +23,6 @@ public class PessoaTest {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
     private Pessoa pessoa;
 
     @Before
@@ -38,7 +35,6 @@ public class PessoaTest {
 
     @Test
     public void savePessoa() {
-
         pessoaRepository.save(pessoa);
         Assert.assertNotNull(pessoa.getId());
     }
