@@ -76,4 +76,19 @@ public class PessoaResourceTest extends ConfigureTestRestAssured {
         getRequestSpecification().given().delete("/pessoas/{id}", pessoa.getId()).then().statusCode(204);
     }
 
+    @Test
+    public void deletarPessoaInexistente() {
+
+        getRequestSpecification().given().delete("/pessoas/{id}", 999L).then().statusCode(404);
+    }
+
+    @Test
+    public void alterarPessoa() {
+        PessoaRequest pessoaRequest = PessoaFabrica.criarPessoaRequestDefault("306.753.868-45");
+        Pessoa pessoa = pessoaFabrica.salvarPessoaRandomBD(pessoaRequest.getCpf());
+        pessoaRequest.setNome("NOME MUDADO");
+
+        getRequestSpecification().given().body(pessoaRequest).put("/pessoas/{id}", pessoa.getId()).then().statusCode(200).and().body("data.nome", Matchers.equalTo(pessoaRequest.getNome()));
+    }
+
 }

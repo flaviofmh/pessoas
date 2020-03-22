@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -45,32 +46,36 @@ public class PessoaResource {
 
     @PostMapping
     public ResponseEntity<Response<PessoaResponse>> salvar(@RequestBody @Valid PessoaRequest pessoaRequest) {
-        Response<PessoaResponse> response = new Response<PessoaResponse>();
-
-        Pessoa pessoa = modelMapper.map(pessoaRequest, Pessoa.class);
-        try {
-            pessoaService.salvarPessoa(pessoa);
-        } catch (Exception ex) {
-            response.getErrors().add(ex.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
-
-        PessoaResponse pessoaResponse = modelMapper.map(pessoa, PessoaResponse.class);
-
-        response.setData(pessoaResponse);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(salvarPessoa(pessoaRequest, null));
     }
 
     @DeleteMapping(value = "{id}")
     public ResponseEntity<Response<String>> delete(@PathVariable("id") Long id) {
         Response<String> response = new Response<String>();
+        pessoaService.deletarPessoa(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping(value = "{id}")
+    public ResponseEntity<Response<PessoaResponse>> atualizar(@RequestBody @Valid PessoaRequest pessoaRequest, @PathVariable("id") Long id) {
+        return ResponseEntity.ok(salvarPessoa(pessoaRequest, id));
+    }
+
+    public Response<PessoaResponse> salvarPessoa(PessoaRequest pessoaRequest, Long id) {
+        Response<PessoaResponse> response = new Response<PessoaResponse>();
+
+        Pessoa pessoa = modelMapper.map(pessoaRequest, Pessoa.class);
         try {
-            pessoaService.deletarPessoa(id);
+            pessoaService.salvarPessoa(pessoa, id);
         } catch (Exception ex) {
             response.getErrors().add(ex.getMessage());
-            return ResponseEntity.badRequest().body(response);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pessoa invalida", ex);
         }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+        PessoaResponse pessoaResponse = modelMapper.map(pessoa, PessoaResponse.class);
+        response.setData(pessoaResponse);
+
+        return response;
     }
 
 }
