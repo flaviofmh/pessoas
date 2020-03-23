@@ -30,7 +30,7 @@ public class PessoaService {
         if(nome != null || cpf != null || dataNascimento != null || email != null) {
             return this.pessoaRepository.findByNomeAndCpfAndDataNascimentoAndEmail(nome, cpf, dataNascimento, email, pages);
         } else {
-            return this.pessoaRepository.findAll(pages);
+            return this.pessoaRepository.findByAtivoIsTrue(pages);
         }
     }
 
