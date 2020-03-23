@@ -19,6 +19,18 @@ public class PessoaResourceTest extends ConfigureTestRestAssured {
     }
 
     @Test
+    public void listarTodasPessoas() {
+        Pessoa pessoa = pessoaFabrica.salvarPessoaRandomBD("168.015.635-72");
+        getRequestSpecification().given()
+                .params("page","0", "count", "10")
+                .get("/pessoas")
+                .then()
+                .statusCode(200)
+                .and()
+                .body("data.totalElements", Matchers.greaterThan(0));;
+    }
+
+    @Test
     public void listarPessoasParametroNomePaginado() {
         Pessoa pessoa = pessoaFabrica.salvarPessoaRandomBD("648.471.743-56");
         getRequestSpecification().given()
