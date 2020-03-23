@@ -1,6 +1,7 @@
 package com.gerenciador.pessoas.dtos;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 public class PessoaRequest {
@@ -9,9 +10,11 @@ public class PessoaRequest {
     private String nome;
 
     @NotNull
+    @Size(max = 14, min = 14)
     private String cpf;
 
     @NotNull
+    @Size(max = 140)
     private String email;
 
     @NotNull

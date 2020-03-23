@@ -27,7 +27,11 @@ public class PessoaService {
             count = 50;
         }
         Pageable pages = PageRequest.of(page, count);
-        return this.pessoaRepository.findByNomeAndCpfAndDataNascimentoAndEmail(pages, nome, cpf, dataNascimento, email);
+        if(nome != null || cpf != null || dataNascimento != null || email != null) {
+            return this.pessoaRepository.findByNomeAndCpfAndDataNascimentoAndEmail(nome, cpf, dataNascimento, email, pages);
+        } else {
+            return this.pessoaRepository.findAll(pages);
+        }
     }
 
     public Pessoa salvarPessoa(Pessoa pessoa, Long id) throws Exception {
