@@ -14,7 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Base64;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -79,6 +84,23 @@ public class PessoaResource {
 
         Pessoa pessoa = modelMapper.map(pessoaRequest, Pessoa.class);
         try {
+
+            if(pessoa.getFoto() == null) {
+                String base64Image = "";
+                File file = new File("F:/home/projetosSpring/tiever/src/main/images/person.png");
+                try (FileInputStream imageInFile = new FileInputStream(file)) {
+                    // Reading a Image file from file system
+                    byte imageData[] = new byte[(int) file.length()];
+                    imageInFile.read(imageData);
+                    base64Image = Base64.getEncoder().encodeToString(imageData);
+                } catch (FileNotFoundException e) {
+                    System.out.println("Image not found" + e);
+                } catch (IOException ioe) {
+                    System.out.println("Exception while reading the Image " + ioe);
+                }
+                pessoa.setFoto("data:image/png;base64,"+base64Image);
+            }
+
             pessoaService.salvarPessoa(pessoa, id);
         } catch (Exception ex) {
             response.getErrors().add(ex.getMessage());

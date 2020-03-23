@@ -33,6 +33,7 @@ public class Pessoa {
     @Email
     private String email;
 
+    @Column(columnDefinition = "TEXT")
     private String foto;
 
     private LocalDate dataNascimento;
