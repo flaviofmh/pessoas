@@ -44,6 +44,19 @@ public class PessoaResource {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(value = "{id}")
+    public ResponseEntity<Response<PessoaResponse>> findById(@PathVariable("id") Long id) {
+        Response<PessoaResponse> response = new Response<PessoaResponse>();
+        Pessoa pessoa = pessoaService.findById(id);
+        if(pessoa == null) {
+            response.getErrors().add("Register not found id: " + id);
+            return ResponseEntity.badRequest().body(response);
+        }
+        PessoaResponse pessoaResponse = modelMapper.map(pessoa, PessoaResponse.class);
+        response.setData(pessoaResponse);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping
     public ResponseEntity<Response<PessoaResponse>> salvar(@RequestBody @Valid PessoaRequest pessoaRequest) {
         return ResponseEntity.ok(salvarPessoa(pessoaRequest, null));

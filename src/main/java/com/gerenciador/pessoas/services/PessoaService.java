@@ -66,4 +66,11 @@ public class PessoaService {
         } else throw new ResponseStatusException(HttpStatus.NOT_FOUND, MessagesExceptions.PESSOA_INVALIDA);
     }
 
+    public Pessoa findById(Long id) {
+        Optional<Pessoa> pessoaOpt = pessoaRepository.findById(id);
+        if(pessoaOpt.isPresent()) {
+            return pessoaOpt.get();
+        }
+        return null;
+    }
 }
