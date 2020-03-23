@@ -147,7 +147,7 @@ public class PessoaServiceTest {
     public void listarPessoas() {
         Page<Pessoa> pessoasPage = new PageImpl<>(pessoas);
 
-        Mockito.when(pessoaRepositoryMock.findByNomeAndCpfAndDataNascimentoAndEmail(Mockito.any(Pageable.class), Mockito.anyString(), Mockito.anyString(), Mockito.any(LocalDate.class), Mockito.anyString())).thenReturn(pessoasPage);
+        Mockito.when(pessoaRepositoryMock.findByNomeAndCpfAndDataNascimentoAndEmail(Mockito.anyString(), Mockito.anyString(), Mockito.any(LocalDate.class), Mockito.anyString(), Mockito.any(Pageable.class))).thenReturn(pessoasPage);
 
         Page<Pessoa> pessoas = pessoaService.listarPessoas(1, random.nextInt(), "Teste", "teste", LocalDate.now(), "teste");
 

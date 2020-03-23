@@ -28,7 +28,7 @@ public class PessoaService {
         }
         Pageable pages = PageRequest.of(page, count);
         if(nome != null || cpf != null || dataNascimento != null || email != null) {
-            return this.pessoaRepository.findByNomeAndCpfAndDataNascimentoAndEmail(pages, nome, cpf, dataNascimento, email);
+            return this.pessoaRepository.findByNomeAndCpfAndDataNascimentoAndEmail(nome, cpf, dataNascimento, email, pages);
         } else {
             return this.pessoaRepository.findAll(pages);
         }
