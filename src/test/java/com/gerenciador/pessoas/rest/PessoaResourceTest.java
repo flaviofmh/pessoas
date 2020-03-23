@@ -18,6 +18,7 @@ public class PessoaResourceTest extends ConfigureTestRestAssured {
         getRequestSpecification().given().params("page","0", "count", "10").get("/pessoas").then().statusCode(200);
     }
 
+
     @Test
     public void listarPessoasErrorRequiredParams() {
         getRequestSpecification().given().get("/pessoas").then().statusCode(400);
