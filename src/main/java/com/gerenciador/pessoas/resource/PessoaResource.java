@@ -23,6 +23,7 @@ import java.util.Base64;
 
 @RestController
 @RequestMapping("/pessoas")
+@CrossOrigin(origins = "*")
 public class PessoaResource {
 
     @Autowired
