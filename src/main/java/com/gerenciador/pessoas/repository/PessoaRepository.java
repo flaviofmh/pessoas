@@ -24,4 +24,6 @@ public interface PessoaRepository extends CrudRepository<Pessoa, Long> {
     boolean existsByCpf(String cpf);
 
     Page<Pessoa> findAll(Pageable pages);
+
+    Page<Pessoa> findByAtivoIsTrue(Pageable pages);
 }

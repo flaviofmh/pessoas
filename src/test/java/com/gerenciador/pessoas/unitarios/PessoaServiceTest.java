@@ -149,7 +149,7 @@ public class PessoaServiceTest {
 
         Mockito.when(pessoaRepositoryMock.findByNomeAndCpfAndDataNascimentoAndEmail(Mockito.anyString(), Mockito.anyString(), Mockito.any(LocalDate.class), Mockito.anyString(), Mockito.any(Pageable.class))).thenReturn(pessoasPage);
 
-        Page<Pessoa> pessoas = pessoaService.listarPessoas(1, random.nextInt(), "Teste", "teste", LocalDate.now(), "teste");
+        Page<Pessoa> pessoas = pessoaService.listarPessoas(1, 5, "Teste", "teste", LocalDate.now(), "teste");
 
         Assert.assertNotNull(pessoas);
         Assert.assertTrue(pessoas.getTotalElements() > 0);

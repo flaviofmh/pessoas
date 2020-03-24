@@ -32,15 +32,27 @@ public class PessoaTest {
     @Before
     public void init() {
         pessoa = new Pessoa();
-        pessoa.setCpf("00000000000");
+        pessoa.setCpf("68141751778");
         pessoa.setNome("alguem");
         pessoa.setEmail("alguem@mail.com");
+        pessoa.setFoto("asdasdasdasdasd");
     }
 
     @Test
     public void savePessoa() {
         pessoaRepository.save(pessoa);
         Assert.assertNotNull(pessoa.getId());
+    }
+
+    @Test
+    public void listarPessoasAtivoFalse() {
+        Pageable pages = PageRequest.of(0, 10);
+
+        pessoa.setAtivo(Boolean.FALSE);
+        pessoaRepository.save(pessoa);
+
+        Page<Pessoa> pessoasPage = pessoaRepository.findByAtivoIsTrue(pages);
+        Assert.assertTrue(pessoasPage.getTotalElements() == 0);
     }
 
     @Test
